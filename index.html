@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    
+    <title>Home - SPIL programming language</title>
+    
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/v4-shims.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
+    <link href='//rsms.me/inter/inter.css' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="css/base.min.css" rel="stylesheet">
+    <link href="css/cinder.min.css" rel="stylesheet">
+
+    
+        
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/github.min.css">
+        
+    
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+    
+
+     
+</head>
+
+<body class="homepage" >
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+
+            <!-- Main title -->
+
+            <a class="navbar-brand" href=".">SPIL programming language</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <i class="fas fa-search"></i> Search
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="first-level active"><a href="#spil-simple-lisp-implementation-written-in-go">SPIL - SimPle LIsp implementation written in Go</a></li>
+            <li class="second-level"><a href="#disclaimer">Disclaimer</a></li>
+                
+            <li class="second-level"><a href="#installation">Installation</a></li>
+                
+            <li class="second-level"><a href="#language-overview">Language overview</a></li>
+                
+                <li class="third-level"><a href="#comments">Comments</a></li>
+                <li class="third-level"><a href="#data-types">Data types</a></li>
+                <li class="third-level"><a href="#everything-is-an-expression">Everything is an expression</a></li>
+                <li class="third-level"><a href="#basic-functions">Basic functions</a></li>
+                <li class="third-level"><a href="#user-defined-functions">User-defined functions</a></li>
+                <li class="third-level"><a href="#control-flows">Control flows</a></li>
+                <li class="third-level"><a href="#recursion">Recursion</a></li>
+                <li class="third-level"><a href="#passing-functions-as-arguments-to-other-functions">Passing functions as arguments to other functions</a></li>
+                <li class="third-level"><a href="#lambdas">Lambdas</a></li>
+                <li class="third-level"><a href="#lazy-lists">Lazy lists</a></li>
+                <li class="third-level"><a href="#using-modules">Using modules</a></li>
+                <li class="third-level"><a href="#big-math">Big math</a></li>
+                <li class="third-level"><a href="#memoization">Memoization</a></li>
+                <li class="third-level"><a href="#work-with-files">Work with files</a></li>
+            <li class="second-level"><a href="#types">Types</a></li>
+                
+                <li class="third-level"><a href="#static-type-checking">Static type checking</a></li>
+                <li class="third-level"><a href="#type-casting">Type casting</a></li>
+                <li class="third-level"><a href="#user-defined-types">User defined types</a></li>
+            <li class="second-level"><a href="#generic-types-work-in-progress">Generic types (work in progress)</a></li>
+                
+                <li class="third-level"><a href="#types-with-parameters">Types with parameters</a></li>
+                <li class="third-level"><a href="#parametrized-function-types">Parametrized function types</a></li>
+                <li class="third-level"><a href="#generic-types">Generic types</a></li>
+            <li class="second-level"><a href="#examples">Examples</a></li>
+                
+            <li class="second-level"><a href="#todo">TODO</a></li>
+                
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1 id="spil-simple-lisp-implementation-written-in-go">SPIL - SimPle LIsp implementation written in Go</h1>
+<p><a href="https://github.com/avoronkov/spil/">github page</a></p>
+<p>SPIL is a small functional language with lisp-like syntax, static type checking and some other features like lazy-evaluations, tail-call optimization and memoization.</p>
+<h2 id="disclaimer">Disclaimer</h2>
+<p>I started SPIL as my own experimental pet-project during the self-isolation in April 2020.
+The idea was to investigate how long does it take to create a programming language from scratch using other programming language (Go).</p>
+<p>So I began with a limited number of basic concepts: 3 primitive types (boolean, integer, string) and 1 complex type (list), very simple LISP-like syntax, then I added user-defined functions, high-order functions, lambdas etc and now I'm trying to manage with generic functions and static type checking.</p>
+<p>Though it's not a production ready language I found it very interesting and fun for some tasks (like solving problems from <a href="https://projecteuler.net/">projecteuler.net</a>).
+Also developing new programming language is very exciting by itself.
+So maybe some day I will implement more reliable interpreter with fast runtime.</p>
+<h2 id="installation">Installation</h2>
+<pre><code>$ go get github.com/avoronkov/spil
+$ spil
+(print &quot;hello world!&quot;)
+^D
+hello world!
+</code></pre>
+
+<h2 id="language-overview">Language overview</h2>
+<p>Well, it's a kind of Lisp, so you write you code with the constructions like that:</p>
+<pre><code class="Lisp">(print (- (* 2 3) 1))
+(print (+ 1 2 3 4 5))
+(print &quot;this is true:&quot; 'T &quot;and this is false:&quot; 'F)
+(print &quot;this is a raw list:&quot; '(1 2 3 print hello))
+</code></pre>
+
+<p>Also it's (almost) pure functional language, so you have no mutable variables and no loops.
+(Actually <code>print</code> is the only statement with side effects).</p>
+<h3 id="comments">Comments</h3>
+<p>Lines started with <code>;</code> or <code>#</code> are comments.</p>
+<h3 id="data-types">Data types</h3>
+<p>SPIL (like most of other Lisps) has atoms and lists as basic data type.
+Atoms include the following:</p>
+<ul>
+<li>
+<p>Integers: <code>0</code> <code>1</code> <code>25</code> <code>1235</code> <code>-128</code> ...</p>
+</li>
+<li>
+<p>Booleans: <code>'T</code> <code>'F</code></p>
+</li>
+<li>
+<p>Strings: <code>"hello world!"</code> <code>"foo"</code> <code>"bar"</code> ...</p>
+</li>
+<li>
+<p>Identifiers: <code>foo</code> <code>bar</code> <code>func</code> <code>if</code> ...</p>
+</li>
+</ul>
+<p>Lists include:</p>
+<ul>
+<li>
+<p>unquoted s-expressions: <code>(foo 1 2 3)</code> <code>(print "hello")</code> ...</p>
+</li>
+<li>
+<p>and quoted (raw) ones: <code>'(this is "not" evaluated)</code> ...</p>
+</li>
+</ul>
+<h3 id="everything-is-an-expression">Everything is an expression</h3>
+<p>Every statement in SPIL is an expression i.e. every statement is r-value which can be returned from function or assigned to "variable".</p>
+<h3 id="basic-functions">Basic functions</h3>
+<p>SPIL has the following builtin functions implemented in Go:</p>
+<ul>
+<li>
+<p><code>print</code> - prints values of expressions on stdout.</p>
+</li>
+<li>
+<p>Arithmetic operations: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>mod</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>.</p>
+</li>
+<li>
+<p>Equality operator: <code>=</code></p>
+</li>
+<li>
+<p>Functions to work with lists: <code>head</code>, <code>tail</code>, <code>append</code>, <code>list</code>, <code>empty</code>.</p>
+</li>
+</ul>
+<h3 id="user-defined-functions">User-defined functions</h3>
+<p>You may define you own function with keyword <code>def</code> (of <code>func</code>):</p>
+<pre><code class="Lisp">; (def &lt;function-name&gt; &lt;function-parameters&gt; &lt;body-statement1&gt; ...)
+(def plus-one (n) (+ n 1))
+
+(print (plus-one 3))
+; 4
+</code></pre>
+
+<p>Return value of function is a return value of last expression in function.</p>
+<p>Note that <code>def</code> defined so-called "pure" function i.e. its return value can depend only on its arguments.</p>
+<p>Function may have multiple definitions with different set of arguments:</p>
+<pre><code class="Lisp">(def factorial (0) 1)
+(def factorial (n) (* n (factorial (- n 1))))
+</code></pre>
+
+<h3 id="control-flows">Control flows</h3>
+<p>SPIL has conditional operator <code>if</code> which has the following syntax:</p>
+<pre><code class="Lisp">(if  some-condition  return-value-if-true return-value-if-false)
+</code></pre>
+
+<p>Note that <code>if</code> is also an expression i.e. it has a return value.</p>
+<h3 id="recursion">Recursion</h3>
+<p>SPIL has no loops. Instead it uses recursion as in example above:</p>
+<pre><code class="Lisp">(def factorial (0) 1)
+(def factorial (n) (* n (factorial (- n 1))))
+</code></pre>
+
+<p>Note that such recursion is not very effective because it consumes call-stack.
+That's why it's better to use tail-call recursion like that:</p>
+<pre><code class="Lisp">(def factorial (n) 1)
+(def factorial (0 result) result)
+(def factorial (n result) (factorial (- n 1) (* result n)))
+</code></pre>
+
+<p>SPIL has Tail Call Optimization so the result will be returned from <code>(factorial 0 result)</code> directly to the caller.</p>
+<p>If you are not familiar with recursion and tail calls you may read a great book for functional programming beginners <a href="https://learnyousomeerlang.com/">Learn you some Erlang for great good</a>.</p>
+<h3 id="passing-functions-as-arguments-to-other-functions">Passing functions as arguments to other functions</h3>
+<p>You may pass function as an argument by its name:</p>
+<pre><code class="Lisp">(func plus-one (n) (+ n 1))
+
+(func apply-func-to-ten (fn) (fn 10))
+
+(print (apply-func-to-ten plus-one))
+; 11
+</code></pre>
+
+<h3 id="lambdas">Lambdas</h3>
+<p>You can define lambda-functions with <code>lamda</code> keyword.</p>
+<pre><code class="Lisp">(func apply-func-to-ten (fn) (fn 10))
+
+(print (apply-func-to-ten (lambda (+ _1 1))))
+; 11
+</code></pre>
+
+<p>Lambdas are very similar to regular functions but they have some difference:</p>
+<ul>
+<li>Lambda can grab values of variable from the context where lambda is defined:</li>
+</ul>
+<pre><code class="Lisp">(func apply-func-to-ten (fn) (fn 10))
+
+(set n 5)
+
+(print (apply-func-to-ten (lambda (+ _1 n))))
+; 15
+</code></pre>
+
+<ul>
+<li>Lambdas are designed to be small so they use short syntax of accessing arguments:
+<code>_1</code>, <code>_2</code>, <code>_3</code> ... for accessing positional arguments and <code>__args</code> for accessing whole list of arguments.</li>
+</ul>
+<h3 id="lazy-lists">Lazy lists</h3>
+<p>You can use keyword <code>gen</code> to define finite or infinite lazy lists.
+For example lazy-list of positive integers can be defined like this:</p>
+<pre><code class="Lisp">(def inc (n) (+ n 1))
+
+; infinite lazy list of integers: (1 2 3 4 ...)
+(set ints (gen inc 0))
+</code></pre>
+
+<p><code>gen</code> has the following syntax:</p>
+<pre><code class="Lisp">(gen &lt;iterator-function&gt; &lt;initial-state&gt;)
+</code></pre>
+
+<p>When somebody asks for <code>head</code> of lazy lists then <code>iterator-function</code> is called with value of previous state.
+Iterator should return one of the following:</p>
+<ul>
+<li>
+<p>Empty list <code>'()</code> to indicate that list has ended.</p>
+</li>
+<li>
+<p>List with one element <code>(list value)</code> which will be returned as next element (head) in lazy-list and will be passed to the next call of iterator.</p>
+</li>
+<li>
+<p>List of two elements <code>(list value new-state)</code>. <code>value</code> will be returned by <code>head</code>, <code>new-state</code> will be passed to the next call of iterator.</p>
+</li>
+</ul>
+<p>For example the infinite list of Fibonacci numbers:</p>
+<pre><code class="Lisp">(def next-fib (prev)
+    (set a (head prev))
+    (set b (head (tail prev)))
+    (list b (list b (+ a b))))
+(set fibs (gen next-fib '(1 1)))
+
+(print (take 10 fibs))
+; '(1 2 3 5 8 13 21 34 55 89)
+</code></pre>
+
+<h3 id="using-modules">Using modules</h3>
+<p>You can <code>use</code> other modules in your program:</p>
+<pre><code class="Lisp">(use &quot;some-module.lisp&quot;)
+
+(function-from-some-module ...)
+</code></pre>
+
+<p>You can also use module <code>std</code> which contains some useful functions like:</p>
+<ul>
+<li>
+<p><code>map</code>, <code>filter</code>, <code>reduce</code> - high order functions to work with lists</p>
+</li>
+<li>
+<p><code>take</code>, <code>take-while</code> - take some elements from the list</p>
+</li>
+<li>
+<p><code>drop</code> - drop somw elements from the list</p>
+</li>
+<li>
+<p><code>length</code> - evaluate length of the list</p>
+</li>
+<li>
+<p><code>nth</code>, <code>first</code>, <code>second</code>, <code>third</code> - access some element in list</p>
+</li>
+<li>
+<p><code>concat</code> - concatenate some lists</p>
+</li>
+<li>
+<p><code>inc</code>, <code>dec</code> - increment, decrement integer value</p>
+</li>
+<li>
+<p><code>lines</code>, <code>words</code> - split string into list of lines or list of words.</p>
+</li>
+</ul>
+<h3 id="big-math">Big math</h3>
+<p>You can use big integers instead of int64 in calculations by adding <code>(use bigmath)</code> statement and the beginning of the main module.</p>
+<pre><code class="Lisp">(use bigmath)
+
+(print (* 10000000 10000000 10000000))
+; 1000000000000000000000
+</code></pre>
+
+<h3 id="memoization">Memoization</h3>
+<p>You can tell the interpreter to remember function results by defining function with <code>def'</code> (or <code>func'</code>) keyword.
+As a result if such function is called with the same set of arguments twice then its result will be calculated only once.
+Second time it will return the stored result.</p>
+<pre><code>(def' x2 (n) (print &quot;evaluating x2&quot; n) (* n 2))
+
+(print (x2 5))
+(print (x2 6))
+(print (x2 5))
+; evaluating x2 5
+; 10
+; evaluating x2 6
+; 12
+; 10
+</code></pre>
+
+<h3 id="work-with-files">Work with files</h3>
+<p>You can work with files as lazy-strings (?).
+Well, it means that you can open file and iterate over its content with <code>head</code> and <code>tail</code> methods.
+It may seems kinda low-lever so I've implemented functions <code>lines</code> and <code>words</code> to split string into lines of words
+and these functions are also lazy.</p>
+<p>Note that you need to use <code>std</code> module to access these functions.</p>
+<pre><code>(use std)
+
+(set' file (open &quot;somefile.txt&quot;))
+
+(print (map words (lines files))
+</code></pre>
+
+<p>Also note that operator <code>set'</code> is used instead of simple <code>set</code>.
+It means that file will be automatically closed when interpreter leaves the current function scope.</p>
+<p>(Writing into files is not implemented yet.)</p>
+<h2 id="types">Types</h2>
+<p>You can specify types of your function parameters and function's return value.</p>
+<pre><code class="Lisp">(def contains (value:any '()) :bool 'F)
+(def contains (value:any lst:list) :bool
+    (if (= (head lst) value)
+        'T
+        (contains value (tail lst))))
+
+(print (contains 4 '(1 3 5 8)))
+</code></pre>
+
+<p>The following builtin type are available: <code>:int</code>, <code>:str</code>, <code>:bool</code>, <code>:list</code>, <code>:func</code>, <code>:any</code>.</p>
+<h3 id="static-type-checking">Static type checking</h3>
+<p>SPIL checks the correctness of types usage in "compile time", i.e. before actual execution of the the program.
+You can specify option "--check" (or "-c") for syntax and type checking of the program.
+E.g. when you misplace the arguments in previous example (<code>(print (contains '(1 3 5 8) 4))</code>) you will get the following error:</p>
+<pre><code>$ spil -c example.lisp
+__main__: contains: no matching function implementation found for [{:list {S': {Int64: 1} {Int64: 3} {Int64: 5} {Int64: 8}}} {:int {Int64: 5}}]
+</code></pre>
+
+<h3 id="type-casting">Type casting</h3>
+<p>Sometimes you need to cast expressions types. E.g. in the following example:</p>
+<pre><code class="Lisp">(def ascending? (l:list) :bool
+     (if (&lt;= (length l) 1)
+       'T
+       (if (&gt; (first l) (second l))
+         'F
+         (ascending? (tail l)))))
+
+(print (ascending? '(1 2 3 5 8)))
+</code></pre>
+
+<p>you will get the error:</p>
+<pre><code>ascending?: &gt;: Expected all integer arguments, found {:any &lt;nil&gt;} at position 0
+</code></pre>
+
+<p>because <code>nth</code> returns <code>:any</code> but <code>&gt;</code> expects <code>:int</code>.
+So you can fix it with casting first and second elements to <code>:int</code>:</p>
+<pre><code class="Lisp">(def ascending? (l:list) :bool
+     (if (&lt;= (length l) 1)
+       'T
+       (if (&gt; (do (first l) :int) (do (second l) :int))
+         'F
+         (ascending? (tail l)))))
+</code></pre>
+
+<p>I may look strange but actually it's rather simple. SPIL has the following forms of types casting:</p>
+<pre><code class="Lisp">; convert result of function to :int
+(def get-int () :int (function-returning-any) :int)
+
+; variable var has type :int now
+(set var (function-returning-any) :int)
+
+; convert return of do-block to :int
+(do (function-returning-any) :int)
+</code></pre>
+
+<h3 id="user-defined-types">User defined types</h3>
+<p>You may define your own type with <code>deftype</code> statement:</p>
+<pre><code class="Lisp">; (deftype new-type parent-type)
+(deftype :my-type :any)
+</code></pre>
+
+<p>It may be helpful in some scenarios, i.e. if we want to implement simple "type-safe" set:</p>
+<pre><code class="Lisp">(deftype :set :list)
+
+(def set-new () :set '() :set)
+(def set-add (elem:any s:set) :set
+    (if (contains elem s)
+      s
+      (do (append s elem) :set)))
+
+;; This will cause typecheck error:
+(set-add '(1 2 2 4 5) 6)
+
+;; This is OK
+(set s1 (set-add (set-new) 1))
+(set s2 (set-add s1 2))
+(set s3 (set-add s2 2))
+(set s4 (set-add s3 3))
+
+(print s4 (length s4))
+</code></pre>
+
+<p>Note that you cannot use :list variable where :set is required, but you can pass :set anywhere where its parent type (:list) is accepted.</p>
+<h2 id="generic-types-work-in-progress">Generic types (work in progress)</h2>
+<h3 id="types-with-parameters">Types with parameters</h3>
+<p>At the some moment I realized that it would be nice to restrict somehow types of list's elements and I added types parametrization.
+It looks like this:</p>
+<pre><code class="Lisp">(def sum-list ('()) :int 0)
+(def sum-list (l:list[int]) :int
+     (+ (head l) (sum-list (tail l))))
+
+(set li '(1 2 3 4 5) :list[int])
+
+(print (sum-list li))
+; 15
+</code></pre>
+
+<p>In this example we declare that <code>sum-list</code> accepts list of integers (<code>:list[int]</code>).
+We also convert our "raw" list <code>'(1 2 3 4 5)</code> into list of integers using type casting.
+Note that passing raw list to <code>sum-list</code> leads to "compile" time error:</p>
+<pre><code class="Lisp">(print (sum-list '(1 2 3 4 5)))
+; __main__: sum-list: no matching function implementation found for [{:list {S': {Int64: 1} {Int64: 2} {Int64: 3} {Int64: 4} {Str: &quot;5&quot;}}}]
+</code></pre>
+
+<p>You may still use type <code>:list</code> list in your code: now it's an alias for type <code>:list[any]</code>.</p>
+<h3 id="parametrized-function-types">Parametrized function types</h3>
+<p>It is possible to specify function signature in type of function like this:</p>
+<pre><code class="Lisp">(def apply-fn-to-ten (fn:func[int,int]) :int (fn 10))
+
+(def x2 (x:int) :int (* x 2))
+
+(print (apply-fn-to-ten x2))
+; 20
+</code></pre>
+
+<p>Syntax of function type is the following:</p>
+<pre><code class="Lisp">:func[types-of-arguments...,type-of-return-value]
+</code></pre>
+
+<p>Since every function in SPIL has a return-value, there should be at least one parameter to type <code>:func</code>.</p>
+<h4 id="function-type-limitations">Function type limitations</h4>
+<ul>
+<li>
+<p><code>:func[...]</code> can be concerted into <code>:func</code> and vice versa.</p>
+</li>
+<li>
+<p>Lambdas always have type <code>:func</code>.</p>
+</li>
+<li>
+<p>If function has several bodies with different signature, its type is computed as <code>:func</code> and parameters matching is not getting checked in "compile" time.</p>
+</li>
+</ul>
+<h3 id="generic-types">Generic types</h3>
+<p>Sometimes it is useful to have generic functions and generic types (hello, Go!).
+Something like this:</p>
+<pre><code class="Lisp">(def nth (n:int l:list[a]) :a ...)
+
+(set l '(1 2 3 4 5) :list[int])
+
+(print (type (nth 3 l)))
+; :int
+</code></pre>
+
+<p>There is a number of pre-defined generic type-parameters (<code>:a</code>, <code>:b</code>, ... <code>:e</code>)
+but you can define your own parameter with <code>contract</code> statement:</p>
+<pre><code>(contract :cmp)
+
+(def sort (l:list[cmp]) :list[cmp] ...)
+</code></pre>
+
+<p>These are not real contracts like in <a href="https://go.googlesource.com/proposal/+/master/design/go2draft-contracts.md">Go draft</a>
+yet but maybe later I will add possibility to add restriction on type parameters.</p>
+<h4 id="generic-types-limitations">Generic types limitations</h4>
+<ul>
+<li>Static type checking does not work properly with generic types in all cases.
+I am going to fix it somehow later (e.g. by implementing contracts (?)).</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<ul>
+<li>Print first 30 prime numbers:</li>
+</ul>
+<pre><code class="Lisp">; increment number
+(def inc (n:int) :int (+ n 1)) 
+
+; test if number is prime
+(def prime? (1) 'F) 
+(def prime? (n) (prime? n 2)) 
+(def prime? (n i)
+    (if (&gt; (* i i) n)
+      'T  
+      (if (= (mod n i) 0)
+        'F  
+        (prime? n (inc i)))))
+
+; lazy list of positive integers
+(set ints (gen inc 0) :list[int]) 
+
+; lazy filter function
+(def filter-int (pred:func l:list) :list
+    (set
+      filt
+      \(if (empty _1) 
+        '() 
+        (if (pred (head _1))
+          (list (head _1) (tail _1))
+          (self (tail _1)))))
+    (gen filt l))
+
+; non-lazy take function
+(def take (n:int l:list[a]) :list[a] (take n l '()))
+(def take (0     l:list[a] acc:list[a]) :list[a] acc)
+(def take (n:int l:list[a] acc:list[a]) :list[a]
+     (take (- n 1) (tail l) (append acc (head l))))
+
+; and finally:
+(print (take 20 (filter-int prime? ints)))
+
+;; '(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71)
+</code></pre>
+
+<p>You can also find some more examples of code <a href="https://github.com/avoronkov/spil/tree/master/examples">here</a></p>
+<h2 id="todo">TODO</h2>
+<ul>
+<li>
+<p>[+] do-statement support</p>
+</li>
+<li>
+<p>[+] multiple function definition with pattern matching</p>
+</li>
+<li>
+<p>[+] pass command line arguments to the command</p>
+</li>
+<li>
+<p>[+] lazy lists</p>
+</li>
+<li>
+<p>[+] apply</p>
+</li>
+<li>
+<p>[+] anonymous functions (?)</p>
+</li>
+<li>
+<p>[+] function "list"</p>
+</li>
+<li>
+<p>[+-] restricted type casting and strict mode.</p>
+</li>
+<li>
+<p>[+] "length" and "nth" optimization for static listst.</p>
+</li>
+<li>
+<p>[+] Separate pragma parsing and loading std-lib first.</p>
+</li>
+<li>
+<p>Functions overloading for user defined types</p>
+</li>
+<li>
+<p>"error" and "catch" functions for runtime errors</p>
+</li>
+<li>
+<p>(TBD) Forbidden matching (:delete or something)</p>
+</li>
+<li>
+<p>Type of variable is vanished when placed into list.</p>
+</li>
+</ul></div>
+        
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        
+        <hr>
+        <p>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</small>
+        </p>
+
+        
+        
+    </footer>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/bootstrap-3.0.3.min.js"></script>
+
+    
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/highlight.min.js"></script>
+        
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    <script>var base_url = "."</script>
+    
+    <script src="js/base.js"></script>
+    <script src="search/main.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    </body>
+
+</html>
+
+<!--
+MkDocs version : 1.1.2
+Build Date UTC : 2020-05-31 10:10:59.268601+00:00
+-->

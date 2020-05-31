@@ -1,0 +1,4 @@
+site_name: SPIL programming language
+theme: readthedocs
+nav:
+- Home: 'index.md'
